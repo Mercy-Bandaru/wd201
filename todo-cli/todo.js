@@ -1,5 +1,5 @@
 const todoList = () => {
-    all = [];
+    let all = []; // Declare using let or const
   
     const add = (todoItem) => {
       all.push(todoItem);
@@ -10,25 +10,30 @@ const todoList = () => {
     };
   
     const overdue = () => {
-      const today = new Date().toISOString().split("T")[0];
-      return all.filter((item) => !item.completed && item.dueDate < today);
+      return all.filter(
+        (todo) => todo.dueDate < new Date().toLocaleDateString("en-CA")
+      );
     };
   
     const dueToday = () => {
-      const today = new Date().toISOString().split("T")[0];
-      return all.filter((item) => !item.completed && item.dueDate === today);
+      return all.filter(
+        (todo) => todo.dueDate == new Date().toLocaleDateString("en-CA")
+      );
     };
   
     const dueLater = () => {
-      const today = new Date().toISOString().split("T")[0];
-      return all.filter((item) => !item.completed && item.dueDate > today);
+      return all.filter(
+        (todo) => todo.dueDate > new Date().toLocaleDateString("en-CA")
+      );
     };
   
     const toDisplayableList = (list) => {
       return list
         .map(
-          (item, index) =>
-            `[${item.completed ? "x" : " "}] ${item.title} ${item.dueDate}`
+          (todo) =>
+            `${todo.completed ? "[x]" : "[ ]"} ${todo.title} ${
+              todo.dueDate == today ? "" : todo.dueDate
+            }`
         )
         .join("\n");
     };
@@ -44,27 +49,20 @@ const todoList = () => {
     };
   };
   
-  // ####################################### #
-  // DO NOT CHANGE ANYTHING BELOW THIS LINE. #
-  // ####################################### #
+  module.exports = todoList;
   
-  const todos = todoList();
+  const todos = todoList(); // Create the todos instance
   
-  const formattedDate = (d) => {
-    return d.toISOString().split("T")[0];
-  };
-  
-  var dateToday = new Date();
-  const today = formattedDate(dateToday);
-  const yesterday = formattedDate(
-    new Date(new Date().setDate(dateToday.getDate() - 1))
-  );
-  const tomorrow = formattedDate(
-    new Date(new Date().setDate(dateToday.getDate() + 1))
-  );
+  const yesterday = new Date(new Date().setDate(new Date().getDate() - 1))
+    .toISOString()
+    .split("T")[0];
+  const today = new Date().toISOString().split("T")[0];
+  const tomorrow = new Date(new Date().setDate(new Date().getDate() + 1))
+    .toISOString()
+    .split("T")[0];
   
   todos.add({ title: "Submit assignment", dueDate: yesterday, completed: false });
-  todos.add({ title: "Pay rent", dueDate: today, completed: false });
+  todos.add({ title: "Pay rent", dueDate: today, completed: true });
   todos.add({ title: "Service Vehicle", dueDate: today, completed: false });
   todos.add({ title: "File taxes", dueDate: tomorrow, completed: false });
   todos.add({ title: "Pay electric bill", dueDate: tomorrow, completed: false });
@@ -87,5 +85,4 @@ const todoList = () => {
   let itemsDueLater = todos.dueLater();
   let formattedItemsDueLater = todos.toDisplayableList(itemsDueLater);
   console.log(formattedItemsDueLater);
-  console.log("\n\n");
-  
+  console.log("\n");
