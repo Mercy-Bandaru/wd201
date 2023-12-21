@@ -11,5 +11,10 @@
   },
   "rules": {
     "no-unused-vars": "off"
+  },
+  "ignorePatterns": ["node_modules/", "dist/"],
+  "globals": {
+    "process": "readonly",
+    "__dirname": "readonly"
   }
 }
