@@ -1,7 +1,11 @@
 #!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
 
+# Include Husky hooks
+HUSKY_SCRIPT_PATH="$(dirname -- "$0")/_/husky.sh"
+. "$HUSKY_SCRIPT_PATH"
 
+# Change directory to todo-cli and run npm tests
 cd todo-cli && npm test
 
+# Run lint-staged using npx
 npx lint-staged
