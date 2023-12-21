@@ -1,95 +1,55 @@
-const todoList = () => {
-  const all = [];
+const taskManager = () => {
+  const tasksList = [];
 
-  const formattedDate = (d) => {
-    const dateCopy = new Date(d);
+  const formatDate = (date) => {
+    const dateCopy = new Date(date);
     return dateCopy.toISOString().split("T")[0];
   };
 
-  const dateToday = new Date();
-  const today = formattedDate(dateToday);
+  const currentDate = new Date();
+  const today = formatDate(currentDate);
 
-  const add = (todoItem) => {
-    all.push(todoItem);
+  const addTask = (task) => {
+    tasksList.push(task);
   };
 
-  const markAsComplete = (index) => {
-    all[index].completed = true;
+  const completeTask = (index) => {
+    tasksList[index].completed = true;
   };
 
-  const overdue = () => {
-    return all.filter((item) => !item.completed && item.dueDate < today);
+  const getOverdueTasks = () => {
+    return tasksList.filter((task) => !task.completed && task.dueDate < today);
   };
 
-  const dueToday = () => {
-    return all.filter((item) => item.dueDate === today);
+  const getTasksDueToday = () => {
+    return tasksList.filter((task) => task.dueDate === today);
   };
 
-  const dueLater = () => {
-    return all.filter((item) => !item.completed && item.dueDate > today);
+  const getTasksDueLater = () => {
+    return tasksList.filter((task) => !task.completed && task.dueDate > today);
   };
 
-  const toDisplayableList = (list) => {
+  const formatDisplayableList = (list) => {
     let displayableList = "";
 
-    list.forEach((item) => {
-      const checkbox = item.completed ? "[x]" : "[ ]";
-      const date = item.dueDate === today ? "" : ` ${item.dueDate}`;
-      displayableList += `${checkbox} ${item.title}${date}\n`;
+    list.forEach((task) => {
+      const checkbox = task.completed ? "[x]" : "[ ]";
+      const date = task.dueDate === today ? "" : ` ${task.dueDate}`;
+      displayableList += `${checkbox} ${task.title}${date}\n`;
     });
 
     return displayableList.trim();
   };
 
   return {
-    all,
-    add,
-    markAsComplete,
-    overdue,
-    dueToday,
-    dueLater,
-    toDisplayableList,
+    all: tasksList,
+    add: addTask,
+    complete: completeTask,
+    overdue: getOverdueTasks,
+    dueToday: getTasksDueToday,
+    dueLater: getTasksDueLater,
+    toDisplayableList: formatDisplayableList,
   };
 };
 
-module.exports = todoList;
-// const todos = todoList();
-
-// const formattedDate = d => {
-//   return d.toISOString().split("T")[0]
-// }
-
-// var dateToday = new Date()
-// const today = formattedDate(dateToday)
-// const yesterday = formattedDate(
-//   new Date(new Date().setDate(dateToday.getDate() - 1))
-// )
-// const tomorrow = formattedDate(
-//   new Date(new Date().setDate(dateToday.getDate() + 1))
-// )
-
-// todos.add({ title: 'Submit assignment', dueDate: yesterday, completed: false })
-// todos.add({ title: 'Pay rent', dueDate: today, completed: true })
-// todos.add({ title: 'Service Vehicle', dueDate: today, completed: false })
-// todos.add({ title: 'File taxes', dueDate: tomorrow, completed: false })
-// todos.add({ title: 'Pay electric bill', dueDate: tomorrow, completed: false })
-
-// console.log("My Todo-list\n")
-
-// console.log("Overdue")
-// var overdues = todos.overdue()
-// var formattedOverdues = todos.toDisplayableList(overdues)
-// console.log(formattedOverdues)
-// console.log("\n")
-
-// console.log("Due Today")
-// let itemsDueToday = todos.dueToday()
-// let formattedItemsDueToday = todos.toDisplayableList(itemsDueToday)
-// console.log(formattedItemsDueToday)
-// console.log("\n")
-
-// console.log("Due Later")
-// let itemsDueLater = todos.dueLater()
-// let formattedItemsDueLater = todos.toDisplayableList(itemsDueLater)
-// console.log(formattedItemsDueLater)
-// console.log("\n\n")
+module.exports = taskManager;
