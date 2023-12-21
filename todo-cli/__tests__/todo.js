@@ -1,79 +1,81 @@
-const todoList = require("../todo");
-let todos;
+const taskManager = require("../taskManager");
+let tasks;
 
+// Setup tasks before each test
 beforeEach(() => {
-  todos = todoList();
+  tasks = taskManager();
 });
 
-describe("TodoList Test Suite", () => {
-  test("Should add new todo", () => {
-    const todoItemsCount = todos.all.length;
-    todos.add({
-      title: "Test todo 2",
+// Test Suite for TaskManager
+describe("TaskManager Test Suite", () => {
+  test("Should add a new task", () => {
+    const initialTaskCount = tasks.all.length;
+    tasks.add({
+      title: "Sample task 2",
       completed: false,
       dueDate: "2023-12-20",
     });
-    expect(todos.all.length).toBe(todoItemsCount + 1);
+    expect(tasks.all.length).toBe(initialTaskCount + 1);
   });
 
-  test("Should mark a todo as complete", () => {
-    todos.add({
-      title: "Test todo",
+  test("Should mark a task as complete", () => {
+    tasks.add({
+      title: "Sample task",
       completed: false,
       dueDate: "2023-12-20",
     });
 
-    expect(todos.all[0].completed).toBe(false);
-    todos.markAsComplete(0);
-    expect(todos.all[0].completed).toBe(true);
+    expect(tasks.all[0].completed).toBe(false);
+    tasks.markAsComplete(0);
+    expect(tasks.all[0].completed).toBe(true);
   });
 
-  test("Should retrieve overdue items", () => {
+  test("Should retrieve overdue tasks", () => {
     const dateToday = new Date();
     const formattedDate = (d) => d.toISOString().split("T")[0];
     const yesterday = formattedDate(
       new Date(dateToday.setDate(dateToday.getDate() - 1)),
     );
 
-    const overDueTodoItemsCount = todos.overdue().length;
-    const overdueAdd = {
-      title: "Complete my assignment",
+    const overdueTasksCount = tasks.overdue().length;
+    const overdueTask = {
+      title: "Finish urgent work",
       dueDate: yesterday,
       completed: false,
     };
-    todos.add(overdueAdd);
-    expect(todos.overdue().length).toEqual(overDueTodoItemsCount + 1);
+    tasks.add(overdueTask);
+    expect(tasks.overdue().length).toEqual(overdueTasksCount + 1);
   });
 
-  test("Should retrieve due today items", () => {
+  test("Should retrieve tasks due today", () => {
     const dateToday = new Date();
     const formattedDate = (d) => d.toISOString().split("T")[0];
     const today = formattedDate(dateToday);
 
-    const DueTodayTodoItemsCount = todos.dueToday().length;
-    const todayAdd = {
-      title: "Complete this milestone",
+    const dueTodayTasksCount = tasks.dueToday().length;
+    const todayTask = {
+      title: "Complete daily tasks",
       dueDate: today,
       completed: false,
     };
-    todos.add(todayAdd);
-    expect(todos.dueToday().length).toEqual(DueTodayTodoItemsCount + 1);
+    tasks.add(todayTask);
+    expect(tasks.dueToday().length).toEqual(dueTodayTasksCount + 1);
   });
 
-  test("Should retrieve due later items", () => {
+  test("Should retrieve tasks due later", () => {
     const dateToday = new Date();
     const formattedDate = (d) => d.toISOString().split("T")[0];
     const tomorrow = formattedDate(
       new Date(dateToday.setDate(dateToday.getDate() + 1)),
     );
 
-    const DueLaterTodoItemsCount = todos.dueLater().length;
-    const laterAdd = {
-      title: "Prepare for sem exams",
+    const dueLaterTasksCount = tasks.dueLater().length;
+    const laterTask = {
+      title: "Prepare for upcoming exams",
       dueDate: tomorrow,
       completed: false,
     };
-    todos.add(laterAdd);
-    expect(todos.dueLater().length).toEqual(DueLaterTodoItemsCount + 1);
+    tasks.add(laterTask);
+    expect(tasks.dueLater().length).toEqual(dueLaterTasksCount + 1);
   });
 });
